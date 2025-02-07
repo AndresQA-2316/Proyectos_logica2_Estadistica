@@ -15,6 +15,9 @@ import javax.swing.WindowConstants;
 
 public class FrmEstadistica extends JFrame {
 
+    private JTextField txtDato;
+    private JList lstMuestra;
+
     public FrmEstadistica() {
         setSize(400, 300);
         setTitle("Calculos estadísticos");
@@ -24,8 +27,8 @@ public class FrmEstadistica extends JFrame {
         JLabel lblDato = new JLabel("Dato");
         lblDato.setBounds(10, 10, 100, 25);
         getContentPane().add(lblDato);
-
-        JTextField txtDato = new JTextField();
+        
+        txtDato = new JTextField();
         txtDato.setBounds(80, 10, 100, 25);
         getContentPane().add(txtDato);
 
@@ -40,8 +43,8 @@ public class FrmEstadistica extends JFrame {
         JButton btnQuitar = new JButton("Quitar");
         btnQuitar.setBounds(80, 70, 100, 25);
         getContentPane().add(btnQuitar);
-
-        JList lstMuestra = new JList();
+        
+        lstMuestra = new JList();
         JScrollPane spMuestra = new JScrollPane(lstMuestra);
         spMuestra.setBounds(210, 40, 100, 150);
         getContentPane().add(spMuestra);
@@ -63,7 +66,7 @@ public class FrmEstadistica extends JFrame {
 
         btnAgregar.addActionListener(new ActionListener(){
             @Override
-            public void actionPerformed(ActionEvent e) {
+             public void actionPerformed(ActionEvent e) {
                     agregarDato();
                 
             }
@@ -79,12 +82,28 @@ public class FrmEstadistica extends JFrame {
             
     }
 
+    private double[] muestra = new double[1000];
+    private int totalDatos=-1;
+
     private void agregarDato(){
-        JOptionPane.showMessageDialog(null,"Hizo click en agregar");
+        double dato=Double.parseDouble(txtDato.getText());
+        totalDatos++;
+        muestra[totalDatos]= dato;
+        mostrarMuestra();
+    }
+
+    private void mostrarMuestra(){
+        String[] strMuestra = new String[totalDatos +1];
+        for(int i=0;i<=totalDatos;i++){
+            strMuestra[i] = String.valueOf(muestra[i]);
+        }
+
+        lstMuestra.setListData(strMuestra);
+
     }
 
     private void quitarDato(){
-        JOptionPane.showMessageDialog(null,"Hizo click en Quitar");
+        
     }
 
 }
