@@ -17,6 +17,8 @@ public class FrmEstadistica extends JFrame {
 
     private JTextField txtDato;
     private JList lstMuestra;
+    private JComboBox cmbEstadistica;
+    private JTextField txtEstadistica;
 
     public FrmEstadistica() {
         setSize(400, 300);
@@ -53,14 +55,14 @@ public class FrmEstadistica extends JFrame {
         btnEstadistica.setBounds(10, 200, 100, 25);
         getContentPane().add(btnEstadistica);
 
-        JComboBox cmbEstadistica = new JComboBox();
+        cmbEstadistica = new JComboBox();
         cmbEstadistica.setBounds(110, 200, 100, 25);
         String[] opciones = new String[] { "Sumatoria", "Promedio", "Desviación", "Máximo", "Mínimo", "Moda" };
         DefaultComboBoxModel mdlOpciones = new DefaultComboBoxModel(opciones);
         cmbEstadistica.setModel(mdlOpciones);
         getContentPane().add(cmbEstadistica);
 
-        JTextField txtEstadistica = new JTextField();
+        txtEstadistica = new JTextField();
         txtEstadistica.setBounds(210, 200, 100, 25);
         getContentPane().add(txtEstadistica);
 
@@ -79,6 +81,14 @@ public class FrmEstadistica extends JFrame {
                     quitarDato();     
             }
         });
+
+        btnEstadistica.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    calcularEstadistica();     
+            }
+        });
             
     }
 
@@ -90,6 +100,7 @@ public class FrmEstadistica extends JFrame {
         totalDatos++;
         muestra[totalDatos]= dato;
         mostrarMuestra();
+        txtDato.setText("");
     }
 
     private void mostrarMuestra(){
@@ -103,7 +114,57 @@ public class FrmEstadistica extends JFrame {
     }
 
     private void quitarDato(){
+        if (lstMuestra.getSelectedIndex()>=0){
+        for(int i=lstMuestra.getSelectedIndex(); i<totalDatos;i++){
+    muestra[i]= muestra[i+1];
+    }
+        totalDatos--;
+            mostrarMuestra();
+        }else{
+            JOptionPane.showMessageDialog(null,"debe seleccionar un dato");                                                                                                                                                                                                                                                                                                                          
+        }
         
     }
 
-}
+    public double Sumatoria(){
+        double suma= 0;
+        for(int i=0;i<=totalDatos;i++){
+                suma += muestra[i];
+        }
+        return suma;
+
+    }
+    public double Promedio(){
+        double Prom= 0;
+
+    if (totalDatos>=0) {
+        Prom=Sumatoria()/ (totalDatos + 1);
+    }
+    return Prom;
+        }
+
+    public double DesviaciónEstandar(){
+        double suma= 0;
+        double PromedioCalculado=Promedio();
+        for(int i=0;i<=totalDatos;i++){
+                suma += Math.abs(muestra[i]-PromedioCalculado);
+        
+    }
+        return totalDatos>= 1 ? suma/totalDatos: 0;
+    }
+     private void calcularEstadistica(){
+        switch (cmbEstadistica.getSelectedIndex()){
+            case 0:
+            txtEstadistica.setText(String.valueOf(Sumatoria()));
+                break;
+
+            case 1:
+            txtEstadistica.setText(String.valueOf(Promedio()));
+                break;
+            case 2:
+            txtEstadistica.setText(String.valueOf(DesviaciónEstandar()));
+                break;
+        
+        }
+     }
+ }
